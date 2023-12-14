@@ -1,0 +1,389 @@
+*1*
+<!-- для хедеру окримий файл там в кніці 
+     -->
+</header> 
+<?php wp_head();?>
+<!-- мова -->
+*1/5 мова*
+<html <?php language_attributes() ?> >
+
+*8/8 *
+посилання на головну
+<!-- в хреф напиши /../ це буде посилання на головну  -->
+
+*2 *
+замість хедеру всюди  
+  <!-- get_header(); -->
+  
+  <?php
+/*
+Template Name: ----- 
+*/
+?>
+*3*
+   <!-- пеервіркА на різні хедери  -->
+   <!--перевірка для потрібоного хедера під кожний варіант свій едер сторінка  -->
+   <?php if(  is_page_template('templates/pageEV.php')) { 
+    get_header('home');}
+    
+    elseif( is_404()) {
+    get_header('404');
+    }
+        else {
+        get_header();
+        }
+        ?>
+   <!-- ************************************ кінець перевірки  -->
+*4*
+<!-- заміна боді 
+      <body> -->
+        <?php wp_body_open(); ?>   
+ *5* 
+  <!-- автоматичний тайтл  -->
+     add_theme_support ( 'title-tag' );
+
+*6*
+<!-- лого посилання  -->
+<?php the_custom_logo(); ?>
+<!-- це вже зашита там посилання та малюнко лого а подія йде в фанкшинс в ад зем суппорт -->
+<!-- ЯКЩО СВГ ТРЕБА ТО СТАВ  свг суппорт плагін І ДОВЗОЛЯЙ ВСЕ З СВГ ТІЛЬКИ АДМІНУ  -->
+<!-- ЛОГО ДОДЄЬТЬСЯ З АДМІНКИ -->
+
+  *7*
+  <!-- замість мета ютф 8 -->
+  <meta charset=<?php bloginfo('charset'); ?>>
+*8*
+  <!-- MENU  -->
+    <?php wp_nav_menu(array(
+       <!-- // розташуваня -->
+    'theme_location' =>'top',
+    <!-- // щб нове меню в діві не було  -->
+    'container' => null,
+    <!-- // обрали ті самі клаc  як в класi верстки макету а потім стокове меню відалили залиши тільки своє -->
+    'menu_class' => 'nav',
+    'menu_id' => 'nav',
+        ));  ?>
+*9*
+всі пОСТИ
+   <!-- якщо поставити -1 бужуть вся поси 
+    а не стільки скілька заміть -1 -->
+    // <!-- вивід постів  -->
+    $myposts = get_posts ([
+       'numberposts' => -1,
+<!-- Загальна кількість публікацій для отримання. Є псевдонімом $posts_per_page 
+у WP_Query. Приймає -1 для всіх. За замовчуванням 5. -->
+'category' => тут ставишь ай ді він в адресі є щоб побачити айді категоріі заходишь записи змінити
+категорію зходишь в свою категорію і баіиш в адресі ID = 2;
+ТК САМО ДЛ КОЖНОГО ПОСТА ТАМ СВОЯ АЙ ДІ
+<!-- Ідентифікатор категорії або список ідентифікаторів, 
+розділених комами (цей або будь-який дочірній).
+Є псевдонімом $cat -->
+        ]);
+        if ( $myposts ){
+       foreach ( $myposts as $post ){
+         setup_postdata ( $post );
+        ?>     
+          <div class="carousel__item">
+            <div class="carousel__item-box">
+              <img class="carousel__item-img" src="images/carousel/1.jpg" alt="">
+              <h4 class="carousel__item-title"><?php the_title() ?></h4>
+              <p class="carousel__item-text">Экономия 4500 $</p>
+            </div>
+                    </div>
+          <?php
+              }
+    }
+    wp_reset_postdata (); // Скидання $post 
+    ?>
+    <!-- кінець виводу  -->
+    </div>
+      </div> 
+      *10/5*
+    <!-- або такий варік****************************************** -->
+  
+		<?php
+		while ( have_posts() ) :
+			the_post();
+
+			get_template_part( 'template-parts/content', get_post_type() );
+
+			the_post_navigation(
+				array(
+					'prev_text' => '<span class="nav-subtitle">' . esc_html__( 'Previous:', 'wp-it-volunteers' ) . '</span> <span class="nav-title">%title</span>',
+					'next_text' => '<span class="nav-subtitle">' . esc_html__( 'Next:', 'wp-it-volunteers' ) . '</span> <span class="nav-title">%title</span>',
+				)
+			);
+
+			// If comments are open or we have at least one comment, load up the comment template.
+			if ( comments_open() || get_comments_number() ) :
+				comments_template();
+			endif;
+
+		endwhile; // End of the loop.
+		?>
+*11*
+<!-- ДЛЯ ВИВЕДННЯ ДАТ  -->*************************************************
+<!-- розділювачі сами обираєщь в дужках  -->
+<time class="date" datetime="2014-01-14T11:24">  <?php the_time('d/m/Y')  ?></time>
+---------------------------------------------------------------------
+*12*
+
+  <!-- для ввидення зображення  -->
+
+<a href="single.html" title=""> <?php the_post_thumbnail('post-thumb')  ?></a>
+
+<!-- post-thumb це імя з фанкшин там е ед имедж сайз -->
+</div>
+
+<div class="post-content">
+*13*
+<!-- шматочок тексту  -->
+Відображає уривок (цитату) допису з [...] у кінці-->
+<?php  the_excerpt(); ?>
+                    
+                  *14*
+ <!-- сайд бар  -->
+           <?php get_sidebar()  ?>
+           *15*
+           <!-- //  СВОЇ ЗАПИСИ -->
+           <!-- ПІСЛЯ ЕД ЗЕМ СУПОРТ ЩОБ БУЛО  -->
+           // **
+           //  <!-- додаю своє записи вони будуть в адмінці окремо від записів  -->
+           // УВАГА
+           // Старайтесь избегать общих названий типов записей, таких как product, order, 
+           //  список зарезервированных слов, которые нельзя использовать: 
+           //  post, page, attachment, revision, nav_menu_item, custom_css, customize_changeset, 
+           //  action, order, theme, author.
+           // Не используйте префикс wp_.
+           // Убедитесь, что длина названия типа записи не превосходит 20 символов,
+            add_action( 'init', 'true_register_cpt' );
+            
+           function true_register_cpt() {
+            
+             $args = array(
+               'labels' => array(
+                 'menu_name' => 'Авиабилеты'
+               ),
+               'public' => true,
+               'menu_icon' => 'dashicons-airplane'
+             );
+             register_post_type( 'misha_aviatickets', $args );
+           }
+           можна  тут деталніше 
+           <!-- https://misha.agency/wordpress/register_post_type.html -->
+                     
+*16*
+<!-- КАСТОМНІ ПОДІЇ  -->
+<?php do_action("my_custom_action");  ?>
+<!-- назву беремо події з фанкшин -->
+*16*
+<!-- вивід урла -->
+<?php get_template_url();  ?>
+<!-- адреса до папки  -->
+<?php get_template_diectory_url();  ?>
+*17*
+<!-- Contact Form 7 -->
+<form class="contacts__form">
+  <h2 class="title contacts__title">Оставить заявку</h2>
+  <!-- далі іинпути вводимо ф конткт форм 7 по типу інпута  там пишешь клас плейсзолдер п/с
+пишешь в значення за замовчуваня та обираешь обрати як заповнювач зберігаєш і там будеть теги готові
+між тегами ніяких пробілів не стаившь кнопу теж туди закидаеш
+потім копіюш шорт код в горі і вставляш заміть формі в статитикі 
+на помилки в плагіні уваги н е звертай це томущо локалка о имейл форми не вазаний
+-->
+<!-- вставили шорткод -->
+<?php echo do_shortcode('[contact-form-7 id="7c2494f" title="Контактна форма 1"]')?>
+</form>
+
+
+<!-- *************************************************************************           замість футера всюди  -->
+           <!-- footer
+   ================================================== -->
+   <?php  get_footer() ?>
+   <!-- А В САМОМУ ФУТЕРІ В КІНЦІ  -->
+     <?php wp_footer();  ?>
+
+*18*
+<!-- у папці теми відриктой в вс коде
+треба відкрити плагн SFTP 
+та вве ти те що там просять  контр шифт п тоді зьвиться файл сфт пи джейсон 
+ -->
+ там буде отаке в сфт джейсоне
+ {
+   "name": "My Server",  <!--імя ервера-->
+   "host": "localhost",<!--адреса-->
+   "protocol": "sftp",
+   "port": 22,
+   "username": "username", <!-- імя користувача в ну наприклад тайм вебе де хостинг куплений-->
+   "password": "password"
+   "remotePath": "/", <!--шлях до папки теми -->
+   "uploadOnSave": true,
+   "useTempFile": false,
+   "openSsh": false
+}
+<!-- це дає можливсть доступа до віддаленої папки з серевар коли вже не локалка -->
+ 
+*19*
+// фільтри *************************************************************
+add_filter( 'excerpt_more', 'new_excerpt_more' );
+function new_excerpt_more( $more ){
+	global $post;
+	return '<a href="'. get_permalink($post) . '">Read more...</a>';
+};
+  
+add_filter('navigation_markup_template',  'my_nav' , 10,2);
+ // дл нав втручаемось для замині класу так ми відфільтрували те що оі вр зробити
+ function my_nav($template, $class) {
+  return '
+  <nav class = "navigation %1$s" role ="navigation">
+  <div class="nav-links">%3$s </div> </nav>
+  ';
+}
+// 10 приоритет 2 параметр
+add_filter( 'document_title_separator', 'mySEP' );
+
+function mySEP( $sep ){
+// поставили свій епаратор тайтла тобто а зави вкладик не плутай з ярдкой адресу
+  $sep = ' *-* ';
+    return $sep;
+}
+
+<!-- // фільтр контенту з додавання в кінц -->
+add_filter('the_content', 'test_content');
+
+function test_content ($content) {
+  $content .= "додали крапкой до контенту цю фразу";
+  return   $content;
+}
+
+<!-- // фільтр додавання  класу ссс++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+add_filter('nav_menu_css_class', 'custom_nav_menu_css_class', 10, 1 );
+// 10 пріорітет 1 аргументов
+function custom_nav_menu_css_class ($classes) {
+  $classes[] = 'nav_item666';
+  return $classes;
+}
+*20*
+<!-- QUERY  -->
+function true_jquery_register() {
+if ( !is_admin() ) {
+  // дерегістрація перед підключеннямм боце ми вп шні прибрали
+  wp_deregister_script( 'jquery' );
+  wp_register_script( 'jquery', ( 'http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js' ), false, null, true );
+  wp_enqueue_script( 'jquery' );
+}
+}
+
+// функція 3 екшин рег навігац
+function theme_registOR() {
+  
+// зарєструвати область область зявиться коли ми обремо в консолі створити меню
+  // оце топ назва може змінюватись але її використувуємо у зем локейшин в наві 
+  // це для воно теж чипляються до події after_setup_theme тому в цій функції
+  // Рї.самостійно віводть тайтли на вкладці
+  // у ед зем супорт багато модливостей дл реестрації кастома 
+  add_theme_support ( 'title-tag' );
+  // цу для ревьюшек посту 
+  add_theme_support ( 'post-thumbnails', array('post') );
+  <!-- наприклда заміть ерая може бути де саме виводити  -->
+    add_theme_support( 'post-formats', array( 'aside', 'gallery' ) );
+    <!-- // тбто тут буде галерея та замітка тепер можна в дамінці 
+    // при постіобирати в записах варіанти інші є -->
+*21*  
+  <!-- // Обрізати зображення ширина висота обрізати тру
+ < add_image_size('post_thumb', 1300, 500, true); -->
+ // ширина висота та так жорстка обрізка
+ // ширина висота та так жорстка обрізка а май имедж це імя ми його вриокристаємо в зенейл
+ // замяна на три читати далі пілс я крапки  після обрізу 
+  }
+
+  <!-- *22* САЙД БАР  -->
+<!-- //   функція 4 екшин для сайд бара  тепер віджети можна  в адмінці -->
+function true_register_new_sidebar() {
+ 
+	register_sidebar(
+		array(
+			'id' => 'right_sidebar',
+			'name' => 'Right sidebar',
+      // нейм для адмикнки 
+			'description' => 'сайдьарчик.',
+      // отут краще дів ніжлі як в стоці вп 
+			'before_widget' => '<div id="%1$s" class="widget %2$s">',
+			'after_widget' => '</div>',
+			'before_title' => '<h4 class="widget-heading">',
+			'after_title' => '</h4>'
+		)
+	);
+ 	/* Чтобы зарегистрировать еще сайдбары, просто скопируйте
+   сюда функцию register_sidebar(), заменив в ней несколько параметров. 
+   а потмі ввиести в потрібному місті за допомогою     <?php dynamic_sidebar('фйді сайдбару'); ?>
+   */
+}
+<!-- *23* -->
+КАСТОМНА ПОДІЇ
+ my_custom_function ()
+{
+  echo "ось я кастомна подія";
+}
+
+*24*
+// реєстраці кількох оластей меню 
+
+function myNav_menus() {
+  $locations = [
+  'top' => __("Шoпка меню", "myNav"),
+  'footer' => __("Footerменю", "myNav"),
+  'side' => __("said", "myNav")
+
+  ];
+  register_nav_menus($locations);
+}
+// +++++++++++++++++ а на сторінцу куди вести меню
+// використовуй <?php wp_nav_menu... (див шпаргалки)
+
+
+
+// шорт код регістрація  ********************************************
+// потрібно щоб в релакторі адмінки вп розумів код
+// шорт коді як дії але можуть викликатися всюди ТАК МОДАЛКИ ВИКЛИКАЮТЬ І ПР ПРП Р
+// потім к вадратних дужках кидаємо в запис в адмінці без лапок  назву шорткуду і він там виконується 
+add_shortcode('my_short', "short_function");
+
+function short_function() {
+  return "ось я КОД В ШОРТАХ";
+}
+
+// ось шорт код для ифрейма 
+add_shortcode( 'iframe', 'Generate_iframe' );
+
+function Generate_iframe( $atts ) {
+
+	$atts = shortcode_atts( [
+		'href'   => 'http://example.com',
+		'height' => '550px',
+		'width'  => '600px',
+	], $atts );
+
+	return sprintf( 
+		'<iframe src="https://uk.wikipedia.org/" width="900px" height="600px"><p>Your Browser does not support Iframes.</p></iframe>',
+		$atts['href'],
+		$atts['width'],
+		$atts['height']
+	);
+}
+
+
+*25*
+<!-- ПОЛІТИКА КОНФЕДІЦИАЛЬНОСТІ -->
+1 створили створінку сингл пшп
+2 створили запис без категорії або нової категорії 
+3 на сингле  гетерім хедер та футер 
+<!-- а потім під хедерм -->
+<?php the_post(); ?>
+<!-- а в озмтіці вже це нижче -->
+<?php the_title(); ?>
+<?php the_content(); ?>
+<!-- 4 впосилання політики пишемо -->
+<?php echo get_page_link(ID запису який бачимо вгорі в адресі просто цифра);?>
+<!-- 5 не забути що тоді коли пости виводиш то вивод ь по категоріям згідно ай ді  -->
+*26*
